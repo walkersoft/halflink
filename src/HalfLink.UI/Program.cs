@@ -1,5 +1,7 @@
-using MudBlazor.Services;
+using HalfLink.Core;
 using HalfLink.UI.Components;
+using Microsoft.Extensions.Options;
+using MudBlazor.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,6 +11,9 @@ builder.Services.AddMudServices();
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
+
+builder.Services.Configure<CosmosSettings>(builder.Configuration.GetSection(nameof(CosmosSettings)));
+builder.Services.AddSingleton(provider => provider.GetRequiredService<IOptions<CosmosSettings>>().Value);
 
 var app = builder.Build();
 
