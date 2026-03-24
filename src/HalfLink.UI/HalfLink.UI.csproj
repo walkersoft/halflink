@@ -15,5 +15,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\HalfLink.Core\HalfLink.Core.csproj" />
+    <ProjectReference Include="..\HalfLink.Data\HalfLink.Data.csproj" />
   </ItemGroup>
 </Project>

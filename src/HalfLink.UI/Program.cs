@@ -1,6 +1,5 @@
-using HalfLink.Core;
+using HalfLink.Data;
 using HalfLink.UI.Components;
-using Microsoft.Extensions.Options;
 using MudBlazor.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,8 +11,7 @@ builder.Services.AddMudServices();
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
-builder.Services.Configure<CosmosSettings>(builder.Configuration.GetSection(nameof(CosmosSettings)));
-builder.Services.AddSingleton(provider => provider.GetRequiredService<IOptions<CosmosSettings>>().Value);
+builder.Services.ConfigureCosmos(builder.Configuration);
 
 var app = builder.Build();
 
@@ -27,7 +25,6 @@ if (!app.Environment.IsDevelopment())
 app.UseStatusCodePagesWithReExecute("/not-found", createScopeForStatusCodePages: true);
 
 app.UseHttpsRedirection();
-
 
 app.UseAntiforgery();
 
