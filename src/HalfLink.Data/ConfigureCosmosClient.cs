@@ -23,6 +23,8 @@ namespace HalfLink.Data
                 var cosmosOptions = new CosmosClientOptions
                 {
                     ApplicationName = "HalfLink",
+                    ConnectionMode = ConnectionMode.Gateway,
+                    LimitToEndpoint = true,
                     SerializerOptions = new CosmosSerializationOptions
                     {
                         PropertyNamingPolicy = CosmosPropertyNamingPolicy.CamelCase,
@@ -31,6 +33,8 @@ namespace HalfLink.Data
 
                 return new CosmosClient(cosmosSettings.Endpoint, cosmosSettings.Key, cosmosOptions);
             });
+
+            services.AddHostedService<CosmosInitializationService>();
 
             return services;
         }
