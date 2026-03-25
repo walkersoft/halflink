@@ -22,7 +22,7 @@ namespace HalfLink.Core
                 throw new ArgumentException("Invalid URL format", nameof(url));
             }
 
-            var halfLink = await TryGenerateHalfLink();
+            var halfLink = await GenerateHalfLink();
 
             var link = new Link
             {
@@ -36,7 +36,7 @@ namespace HalfLink.Core
             return link;
         }
 
-        private async Task<string> TryGenerateHalfLink()
+        private async Task<string> GenerateHalfLink()
         {
             var generations = MAX_GENERATIONS;
             bool halfLinkExists;
@@ -44,7 +44,7 @@ namespace HalfLink.Core
 
             do
             {
-                halfLink = GenerateHalfLink();
+                halfLink = CreateRandomHalfLink();
                 halfLinkExists = await repository.HalfLinkExists(halfLink);
                 generations--;
             } while (halfLinkExists && generations > 0);
@@ -57,7 +57,7 @@ namespace HalfLink.Core
             return halfLink;
         }
 
-        private static string GenerateHalfLink()
+        private static string CreateRandomHalfLink()
         {
             var random = new Random();
 
