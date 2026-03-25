@@ -14,24 +14,35 @@ namespace HalfLink.Core.Tests
             service = new HalfLinkService(repoMock.Object);
         }
 
-        [Fact]
-        public async Task GivenValidUrl_WhenSubmitted_CreatesCompleteHalfLink()
+        [Theory]
+        [InlineData("https://example.com")]
+        [InlineData("http://example.com")]
+        [InlineData("www.example.com")]
+        [InlineData("example.com")]
+        [InlineData("https://example.com/segment")]
+        [InlineData("http://example.com/segment")]
+        [InlineData("www.example.com/segment")]
+        [InlineData("example.com/segment")]
+        [InlineData("https://example.com/?query=param")]
+        [InlineData("http://example.com/?query=param")]
+        [InlineData("www.example.com/?query=param")]
+        [InlineData("example.com/?query=param")]
+        public async Task GivenValidUrl_WhenSubmitted_CreatesCompleteHalfLink(string url)
         {
-            var url = "https://example.com";
-
             var link = await service.CreateHalfLink(url);
 
             link.ShouldNotBeNull();
             link.Id.ShouldNotBe(default);
-            link.FullLink.ShouldBe(url);
+            link.FullLink.ShouldStartWith("http");
             link.HalfLink.Length.ShouldBe(8);
         }
 
         [Theory]
         [InlineData("")]
-        [InlineData("foobar")]
-        [InlineData("http://invalid-url")]
-        [InlineData("https://www.invalid-url")]
+        [InlineData(" ")]
+        [InlineData("\n")]
+        [InlineData("http://")]
+        [InlineData("http://.foobar")]
         public async Task GivenInvalidUrl_WhenSubmitted_ThrowsException(string url)
         {
             var action = async () => await service.CreateHalfLink(url);
