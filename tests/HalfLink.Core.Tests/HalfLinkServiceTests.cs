@@ -63,7 +63,19 @@ namespace HalfLink.Core.Tests
         {
             var link = await service.CreateLink("https://example.com");
 
-            repoMock.Verify(repo => repo.HalfLinkExists(link.HalfLink), Times.Once);
+            repoMock.Verify(repo => repo.HalfLinkExists(link.HalfLink), Times.AtLeastOnce);
+        }
+
+        [Fact]
+        public async Task GivenValidUrl_WhenUnableToGenerateHalfLink_ThrowsException()
+        {
+            repoMock.Setup(repo => repo.HalfLinkExists(It.IsAny<string>())).ReturnsAsync(true);
+
+            var action = async () => await service.CreateLink("https://example.com");
+
+            await action.ShouldThrowAsync<InvalidOperationException>();
+            repoMock.Verify(repo => repo.HalfLinkExists(It.IsAny<string>()), Times.Exactly(3));
+            repoMock.VerifyNoOtherCalls();
         }
     }
 }
