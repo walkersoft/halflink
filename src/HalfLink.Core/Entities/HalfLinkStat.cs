@@ -1,6 +1,6 @@
 ﻿namespace HalfLink.Core.Entities
 {
-    public class LinkStat
+    public class HalfLinkStat
     {
         public Guid Id { get; set; }
         public Guid LinkId { get; set; }

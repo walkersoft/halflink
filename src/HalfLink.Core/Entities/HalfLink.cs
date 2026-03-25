@@ -1,6 +1,6 @@
 ﻿namespace HalfLink.Core.Entities
 {
-    public class Link
+    public class HalfLink
     {
         public Guid Id { get; set; }
         public string FullLink { get; set; } = string.Empty;
