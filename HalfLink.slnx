@@ -5,6 +5,6 @@
     <Project Path="src/HalfLink.UI/HalfLink.UI.csproj" />
   </Folder>
   <Folder Name="/tests/">
-    <Project Path="tests/HalfLink.Core/HalfLink.Core.csproj" />
+    <Project Path="tests/HalfLink.Core.Tests/HalfLink.Core.Tests.csproj" />
   </Folder>
 </Solution>
