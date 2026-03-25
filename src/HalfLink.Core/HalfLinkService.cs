@@ -13,7 +13,7 @@ namespace HalfLink.Core
 
             if (!url.StartsWith("http://") && !url.StartsWith("https://"))
             {
-                url = $"http://{url}";
+                url = $"https://{url}";
             }
 
             if (!Uri.IsWellFormedUriString(url, UriKind.Absolute))
@@ -27,6 +27,8 @@ namespace HalfLink.Core
                 FullLink = url,
                 HalfLink = GenerateHalfLink()
             };
+
+            await repository.CreateLink(link);
 
             return link;
         }
