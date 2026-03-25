@@ -4,7 +4,7 @@
     {
         const string halfLinkChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 
-        public async Task<Entities.HalfLink> CreateHalfLink(string url)
+        public async Task<Entities.Link> CreateHalfLink(string url)
         {
             ArgumentException.ThrowIfNullOrWhiteSpace(url, nameof(url));
             url = url.ToLower();
@@ -19,7 +19,7 @@
                 throw new ArgumentException("Invalid URL format", nameof(url));
             }
 
-            var halfLink = new Entities.HalfLink
+            var halfLink = new Entities.Link
             {
                 Id = Guid.NewGuid(),
                 FullLink = url,
