@@ -1,6 +1,9 @@
-﻿namespace HalfLink.Core
+﻿using HalfLink.Core.Entities;
+
+namespace HalfLink.Core;
+
+public interface IHalfLinkRepository
 {
-    public interface IHalfLinkRepository
-    {
-    }
+    Task CreateLink(Link link);
+    Task<bool> HalfLinkExists(string halfLink);
 }

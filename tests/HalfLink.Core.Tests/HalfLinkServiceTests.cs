@@ -29,7 +29,7 @@ namespace HalfLink.Core.Tests
         [InlineData("example.com/?query=param")]
         public async Task GivenValidUrl_WhenSubmitted_CreatesCompleteHalfLink(string url)
         {
-            var link = await service.CreateHalfLink(url);
+            var link = await service.CreateLink(url);
 
             link.ShouldNotBeNull();
             link.Id.ShouldNotBe(default);
@@ -45,9 +45,25 @@ namespace HalfLink.Core.Tests
         [InlineData("http://.foobar")]
         public async Task GivenInvalidUrl_WhenSubmitted_ThrowsException(string url)
         {
-            var action = async () => await service.CreateHalfLink(url);
+            var action = async () => await service.CreateLink(url);
 
             await action.ShouldThrowAsync<ArgumentException>();
+        }
+
+        [Fact]
+        public async Task GivenValidUrl_WhenSubmitted_SubmitsToLinkRepo()
+        {
+            var link = await service.CreateLink("https://example.com");
+
+            repoMock.Verify(repo => repo.CreateLink(link), Times.Once);
+        }
+
+        [Fact]
+        public async Task GivenValidUrl_WhenSubmitted_ChecksForExistingHalfLink()
+        {
+            var link = await service.CreateLink("https://example.com");
+
+            repoMock.Verify(repo => repo.HalfLinkExists(link.HalfLink), Times.Once);
         }
     }
 }

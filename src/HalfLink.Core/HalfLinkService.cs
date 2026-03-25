@@ -1,10 +1,12 @@
-﻿namespace HalfLink.Core
+﻿using HalfLink.Core.Entities;
+
+namespace HalfLink.Core
 {
     public sealed class HalfLinkService(IHalfLinkRepository repository)
     {
         const string halfLinkChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 
-        public async Task<Entities.Link> CreateHalfLink(string url)
+        public async Task<Link> CreateLink(string url)
         {
             ArgumentException.ThrowIfNullOrWhiteSpace(url, nameof(url));
             url = url.ToLower();
@@ -19,14 +21,14 @@
                 throw new ArgumentException("Invalid URL format", nameof(url));
             }
 
-            var halfLink = new Entities.Link
+            var link = new Link
             {
                 Id = Guid.NewGuid(),
                 FullLink = url,
                 HalfLink = GenerateHalfLink()
             };
 
-            return halfLink;
+            return link;
         }
 
         private static string GenerateHalfLink()
