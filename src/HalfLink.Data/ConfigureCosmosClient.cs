@@ -1,4 +1,5 @@
-﻿using Microsoft.Azure.Cosmos;
+﻿using HalfLink.Core;
+using Microsoft.Azure.Cosmos;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -35,6 +36,7 @@ namespace HalfLink.Data
             });
 
             services.AddHostedService<CosmosInitializationService>();
+            services.AddSingleton<IHalfLinkRepository, CosmosHalfLinkRepository>();
 
             return services;
         }
