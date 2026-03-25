@@ -16,7 +16,10 @@ namespace HalfLink.Core
                 url = $"http://{url}";
             }
 
-            if (!IsValidUrl(url)) throw new ArgumentException("Invalid URL format", nameof(url));
+            if (!Uri.IsWellFormedUriString(url, UriKind.Absolute))
+            {
+                throw new ArgumentException("Invalid URL format", nameof(url));
+            }
 
             var halfLink = new Link
             {
@@ -27,9 +30,6 @@ namespace HalfLink.Core
 
             return halfLink;
         }
-
-        private static bool IsValidUrl(string url) =>
-            Uri.TryCreate(url, UriKind.Absolute, out var _) && Uri.IsWellFormedUriString(url, UriKind.Absolute);
 
         private static string GenerateHalfLink()
         {
