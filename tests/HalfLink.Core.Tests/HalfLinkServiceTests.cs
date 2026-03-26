@@ -88,14 +88,12 @@ namespace HalfLink.Core.Tests
                 FullLink = "https://example.com",
                 HalfLink = "abc12345"
             };
-            repoMock.Setup(repo => repo.HalfLinkExists(existingLink.HalfLink)).ReturnsAsync(true);
             repoMock.Setup(repo => repo.GetLink(existingLink.HalfLink)).ReturnsAsync(existingLink);
 
             var link = await service.GetLink(existingLink.HalfLink);
 
             link.ShouldNotBeNull();
             link.FullLink.ShouldBe(existingLink.FullLink);
-            repoMock.Verify(repo => repo.HalfLinkExists(existingLink.HalfLink), Times.Once);
             repoMock.Verify(repo => repo.GetLink(existingLink.HalfLink), Times.Once);
             repoMock.VerifyNoOtherCalls();
         }
@@ -104,12 +102,12 @@ namespace HalfLink.Core.Tests
         public async Task GivenNonExistingHalfLink_WhenFetched_ReturnsNull()
         {
             var halfLink = "abc12345";
-            repoMock.Setup(repo => repo.HalfLinkExists(halfLink)).ReturnsAsync(true);
+            repoMock.Setup(repo => repo.GetLink(halfLink)).ReturnsAsync((Link?)null);
 
             var link = await service.GetLink(halfLink);
 
             link.ShouldBeNull();
-            repoMock.Verify(repo => repo.HalfLinkExists(halfLink), Times.Once);
+            repoMock.Verify(repo => repo.GetLink(halfLink), Times.Once);
             repoMock.VerifyNoOtherCalls();
         }
     }
