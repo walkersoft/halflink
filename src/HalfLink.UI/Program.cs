@@ -1,3 +1,4 @@
+using HalfLink.Core;
 using HalfLink.Data;
 using HalfLink.UI.Components;
 using MudBlazor.Services;
@@ -11,6 +12,7 @@ builder.Services.AddMudServices();
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
+builder.Services.AddApplicationServices();
 builder.Services.ConfigureCosmos(builder.Configuration);
 
 var app = builder.Build();
