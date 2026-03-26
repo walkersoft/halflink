@@ -12,9 +12,20 @@ namespace HalfLink.Data
             await container.CreateItemAsync(link, new PartitionKey(link.HalfLink));
         }
 
-        public Task<Link?> GetLink(string halfLink)
+        public async Task<Link?> GetLink(string halfLink)
         {
-            throw new NotImplementedException();
+            var container = GetLinksContainer();
+            var query = new QueryDefinition("SELECT * FROM links WHERE links.halfLink = @halfLink")
+                .WithParameter("@halfLink", halfLink);
+
+            using var iterator = container.GetItemQueryIterator<Link>(query);
+            if (iterator.HasMoreResults)
+            {
+                var response = await iterator.ReadNextAsync();
+                return response.Resource.FirstOrDefault();
+            }
+
+            return null;
         }
 
         public async Task<bool> HalfLinkExists(string halfLink)
