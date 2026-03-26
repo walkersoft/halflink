@@ -12,6 +12,11 @@ namespace HalfLink.Data
             await container.CreateItemAsync(link, new PartitionKey(link.HalfLink));
         }
 
+        public Task<Link?> GetLink(string halfLink)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<bool> HalfLinkExists(string halfLink)
         {
             var container = GetLinksContainer();

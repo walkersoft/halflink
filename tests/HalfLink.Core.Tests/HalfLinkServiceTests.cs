@@ -1,4 +1,5 @@
-﻿using Moq;
+﻿using HalfLink.Core.Entities;
+using Moq;
 using Shouldly;
 
 namespace HalfLink.Core.Tests
@@ -75,6 +76,40 @@ namespace HalfLink.Core.Tests
 
             await action.ShouldThrowAsync<InvalidOperationException>();
             repoMock.Verify(repo => repo.HalfLinkExists(It.IsAny<string>()), Times.Exactly(3));
+            repoMock.VerifyNoOtherCalls();
+        }
+
+        [Fact]
+        public async Task GivenExistingHalfLink_WhenFetched_ReturnsLink()
+        {
+            var existingLink = new Link
+            {
+                Id = Guid.NewGuid(),
+                FullLink = "https://example.com",
+                HalfLink = "abc12345"
+            };
+            repoMock.Setup(repo => repo.HalfLinkExists(existingLink.HalfLink)).ReturnsAsync(true);
+            repoMock.Setup(repo => repo.GetLink(existingLink.HalfLink)).ReturnsAsync(existingLink);
+
+            var link = await service.GetLink(existingLink.HalfLink);
+
+            link.ShouldNotBeNull();
+            link.FullLink.ShouldBe(existingLink.FullLink);
+            repoMock.Verify(repo => repo.HalfLinkExists(existingLink.HalfLink), Times.Once);
+            repoMock.Verify(repo => repo.GetLink(existingLink.HalfLink), Times.Once);
+            repoMock.VerifyNoOtherCalls();
+        }
+
+        [Fact]
+        public async Task GivenNonExistingHalfLink_WhenFetched_ReturnsNull()
+        {
+            var halfLink = "abc12345";
+            repoMock.Setup(repo => repo.HalfLinkExists(halfLink)).ReturnsAsync(true);
+
+            var link = await service.GetLink(halfLink);
+
+            link.ShouldBeNull();
+            repoMock.Verify(repo => repo.HalfLinkExists(halfLink), Times.Once);
             repoMock.VerifyNoOtherCalls();
         }
     }

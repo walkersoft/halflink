@@ -69,5 +69,10 @@ namespace HalfLink.Core
 
             return new string([.. chars]);
         }
+
+        public async Task<Link?> GetLink(string halfLink)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
