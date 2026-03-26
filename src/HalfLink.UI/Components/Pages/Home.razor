@@ -1,6 +1,4 @@
 ﻿@page "/"
-@using HalfLink.Core
-@using HalfLink.Core.Entities
 @rendermode InteractiveServer
 
 @inject NavigationManager Navigation
@@ -43,7 +41,12 @@
         {
             <MudStack AlignItems="AlignItems.Center" Class="mt-5">
                 <MudText Typo="Typo.h6" GutterBottom="true">Shortened URL</MudText>
-                <MudText><MudLink Href="@createdLinkUrl" Target="_blank">@createdLinkUrl</MudLink></MudText>
+                <MudText>
+                    <MudLink Href="@createdLinkUrl" Target="_blank" Class="d-flex align-center">
+                        @createdLinkUrl
+                        <MudIcon Icon="@Icons.Material.Filled.OpenInNew" Size="Size.Small" Class="ml-1"/>
+                    </MudLink>
+                </MudText>
             </MudStack>
         }
     </MudGrid>
