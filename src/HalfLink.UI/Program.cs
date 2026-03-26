@@ -1,5 +1,6 @@
 using HalfLink.Core;
 using HalfLink.Data;
+using HalfLink.UI;
 using HalfLink.UI.Components;
 using MudBlazor.Services;
 
@@ -33,5 +34,7 @@ app.UseAntiforgery();
 app.MapStaticAssets();
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode();
+
+app.AddApplicationEndpoints();
 
 app.Run();
