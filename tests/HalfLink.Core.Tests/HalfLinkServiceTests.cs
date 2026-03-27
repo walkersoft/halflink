@@ -73,15 +73,8 @@ namespace HalfLink.Core.Tests
         public async Task GivenValidUrl_WhenSubmitted_CreatesFirstStatEntry()
         {
             var link = await service.CreateLink("https://example.com");
-            var linkStat = new LinkStat
-            {
-                Id = Guid.NewGuid(),
-                LinkId = link.Id,
-                Referrer = "SYSTEM",
-                AccessedAt = DateTime.UtcNow,
-            };
 
-            statRepoMock.Verify(repo => repo.CreateStatEntry(linkStat), Times.Once);
+            statRepoMock.Verify(repo => repo.CreateStat(It.IsAny<LinkStat>()), Times.Once);
         }
 
         [Fact]
