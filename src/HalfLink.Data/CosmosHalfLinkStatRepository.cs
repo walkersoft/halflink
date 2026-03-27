@@ -1,13 +1,17 @@
 ﻿using HalfLink.Core;
 using HalfLink.Core.Entities;
+using Microsoft.Azure.Cosmos;
 
 namespace HalfLink.Data
 {
-    internal class CosmosHalfLinkStatRepository : IHalfLinkStatRepository
+    internal class CosmosHalfLinkStatRepository(CosmosClient client, CosmosSettings settings) : IHalfLinkStatRepository
     {
-        public void CreateStatEntry(LinkStat linkStat)
+        public async Task CreateStat(LinkStat linkStat)
         {
-            throw new NotImplementedException();
+            var container = GetStatsContainer();
+            await container.CreateItemAsync(linkStat, new PartitionKey(linkStat.LinkId.ToString()));
         }
+
+        private Container GetStatsContainer() => client.GetContainer(settings.DatabaseName, settings.StatsContainer);
     }
 }

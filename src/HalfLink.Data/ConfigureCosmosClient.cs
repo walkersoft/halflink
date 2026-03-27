@@ -37,6 +37,7 @@ namespace HalfLink.Data
 
             services.AddHostedService<CosmosInitializationService>();
             services.AddSingleton<IHalfLinkRepository, CosmosHalfLinkRepository>();
+            services.AddSingleton<IHalfLinkStatRepository, CosmosHalfLinkStatRepository>();
 
             return services;
         }

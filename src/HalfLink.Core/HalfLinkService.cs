@@ -33,6 +33,16 @@ namespace HalfLink.Core
 
             await linksRepository.CreateLink(link);
 
+            var firstStat = new LinkStat
+            {
+                Id = Guid.NewGuid(),
+                LinkId = link.Id,
+                AccessedAt = DateTime.UtcNow,
+                Referrer = "SYSTEM_CREATED"
+            };
+
+            await statsRepository.CreateStat(firstStat);
+
             return link;
         }
 

@@ -4,6 +4,6 @@ namespace HalfLink.Core
 {
     public interface IHalfLinkStatRepository
     {
-        void CreateStatEntry(LinkStat linkStat);
+        Task CreateStat(LinkStat linkStat);
     }
 }
