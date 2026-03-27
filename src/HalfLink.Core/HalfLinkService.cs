@@ -2,7 +2,7 @@
 
 namespace HalfLink.Core
 {
-    public sealed class HalfLinkService(IHalfLinkRepository repository)
+    public sealed class HalfLinkService(IHalfLinkRepository linksRepository, IHalfLinkStatRepository statsRepository)
     {
         const string HALF_LINK_CHARS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
         const int MAX_GENERATIONS = 3;
@@ -31,7 +31,7 @@ namespace HalfLink.Core
                 HalfLink = halfLink
             };
 
-            await repository.CreateLink(link);
+            await linksRepository.CreateLink(link);
 
             return link;
         }
@@ -45,7 +45,7 @@ namespace HalfLink.Core
             do
             {
                 halfLink = CreateRandomHalfLink();
-                halfLinkExists = await repository.HalfLinkExists(halfLink);
+                halfLinkExists = await linksRepository.HalfLinkExists(halfLink);
                 generations--;
             } while (halfLinkExists && generations > 0);
 
@@ -70,6 +70,6 @@ namespace HalfLink.Core
             return new string([.. chars]);
         }
 
-        public async Task<Link?> GetLink(string halfLink) => await repository.GetLink(halfLink);
+        public async Task<Link?> GetLink(string halfLink) => await linksRepository.GetLink(halfLink);
     }
 }

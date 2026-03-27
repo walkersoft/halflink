@@ -7,12 +7,14 @@ namespace HalfLink.Core.Tests
     public class HalfLinkServiceTests
     {
         private readonly HalfLinkService service;
-        private readonly Mock<IHalfLinkRepository> repoMock;
+        private readonly Mock<IHalfLinkRepository> linkRepoMock;
+        private readonly Mock<IHalfLinkStatRepository> statRepoMock;
 
         public HalfLinkServiceTests()
         {
-            repoMock = new Mock<IHalfLinkRepository>();
-            service = new HalfLinkService(repoMock.Object);
+            linkRepoMock = new Mock<IHalfLinkRepository>();
+            statRepoMock = new Mock<IHalfLinkStatRepository>();
+            service = new HalfLinkService(linkRepoMock.Object, statRepoMock.Object);
         }
 
         [Theory]
@@ -56,7 +58,7 @@ namespace HalfLink.Core.Tests
         {
             var link = await service.CreateLink("https://example.com");
 
-            repoMock.Verify(repo => repo.CreateLink(link), Times.Once);
+            linkRepoMock.Verify(repo => repo.CreateLink(link), Times.Once);
         }
 
         [Fact]
@@ -64,19 +66,34 @@ namespace HalfLink.Core.Tests
         {
             var link = await service.CreateLink("https://example.com");
 
-            repoMock.Verify(repo => repo.HalfLinkExists(link.HalfLink), Times.AtLeastOnce);
+            linkRepoMock.Verify(repo => repo.HalfLinkExists(link.HalfLink), Times.AtLeastOnce);
+        }
+
+        [Fact]
+        public async Task GivenValidUrl_WhenSubmitted_CreatesFirstStatEntry()
+        {
+            var link = await service.CreateLink("https://example.com");
+            var linkStat = new LinkStat
+            {
+                Id = Guid.NewGuid(),
+                LinkId = link.Id,
+                Referrer = "SYSTEM",
+                AccessedAt = DateTime.UtcNow,
+            };
+
+            statRepoMock.Verify(repo => repo.CreateStatEntry(linkStat), Times.Once);
         }
 
         [Fact]
         public async Task GivenValidUrl_WhenUnableToGenerateHalfLink_ThrowsException()
         {
-            repoMock.Setup(repo => repo.HalfLinkExists(It.IsAny<string>())).ReturnsAsync(true);
+            linkRepoMock.Setup(repo => repo.HalfLinkExists(It.IsAny<string>())).ReturnsAsync(true);
 
             var action = async () => await service.CreateLink("https://example.com");
 
             await action.ShouldThrowAsync<InvalidOperationException>();
-            repoMock.Verify(repo => repo.HalfLinkExists(It.IsAny<string>()), Times.Exactly(3));
-            repoMock.VerifyNoOtherCalls();
+            linkRepoMock.Verify(repo => repo.HalfLinkExists(It.IsAny<string>()), Times.Exactly(3));
+            linkRepoMock.VerifyNoOtherCalls();
         }
 
         [Fact]
@@ -88,27 +105,27 @@ namespace HalfLink.Core.Tests
                 FullLink = "https://example.com",
                 HalfLink = "abc12345"
             };
-            repoMock.Setup(repo => repo.GetLink(existingLink.HalfLink)).ReturnsAsync(existingLink);
+            linkRepoMock.Setup(repo => repo.GetLink(existingLink.HalfLink)).ReturnsAsync(existingLink);
 
             var link = await service.GetLink(existingLink.HalfLink);
 
             link.ShouldNotBeNull();
             link.FullLink.ShouldBe(existingLink.FullLink);
-            repoMock.Verify(repo => repo.GetLink(existingLink.HalfLink), Times.Once);
-            repoMock.VerifyNoOtherCalls();
+            linkRepoMock.Verify(repo => repo.GetLink(existingLink.HalfLink), Times.Once);
+            linkRepoMock.VerifyNoOtherCalls();
         }
 
         [Fact]
         public async Task GivenNonExistingHalfLink_WhenFetched_ReturnsNull()
         {
             var halfLink = "abc12345";
-            repoMock.Setup(repo => repo.GetLink(halfLink)).ReturnsAsync((Link?)null);
+            linkRepoMock.Setup(repo => repo.GetLink(halfLink)).ReturnsAsync((Link?)null);
 
             var link = await service.GetLink(halfLink);
 
             link.ShouldBeNull();
-            repoMock.Verify(repo => repo.GetLink(halfLink), Times.Once);
-            repoMock.VerifyNoOtherCalls();
+            linkRepoMock.Verify(repo => repo.GetLink(halfLink), Times.Once);
+            linkRepoMock.VerifyNoOtherCalls();
         }
     }
 }
