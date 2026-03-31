@@ -7,10 +7,12 @@ namespace HalfLink.Core
         const string HALF_LINK_CHARS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
         const int MAX_GENERATIONS = 3;
 
+        public async Task<Link?> GetLink(string halfLink) => await linksRepository.GetLink(halfLink);
+
         public async Task<Link> CreateLink(string url)
         {
             ArgumentException.ThrowIfNullOrWhiteSpace(url, nameof(url));
-            url = url.ToLower();
+            url = url.ToLower().Trim();
 
             if (!url.StartsWith("http://") && !url.StartsWith("https://"))
             {
@@ -79,7 +81,5 @@ namespace HalfLink.Core
 
             return new string([.. chars]);
         }
-
-        public async Task<Link?> GetLink(string halfLink) => await linksRepository.GetLink(halfLink);
     }
 }

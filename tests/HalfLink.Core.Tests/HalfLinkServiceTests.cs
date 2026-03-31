@@ -53,6 +53,18 @@ namespace HalfLink.Core.Tests
             await action.ShouldThrowAsync<ArgumentException>();
         }
 
+        [Theory]
+        [InlineData(" https://example.com")]
+        [InlineData("https://example.com ")]
+        [InlineData(" https://example.com ")]
+        public async Task GivenValidUrlWithSurroundingWhitesspace_WhenSubmitted_HasWhiteSpaceRemoved(string url)
+        {
+            var link = await service.CreateLink(url);
+
+            link.ShouldNotBeNull();
+            link.FullLink.ShouldBe("https://example.com");
+        }
+
         [Fact]
         public async Task GivenValidUrl_WhenSubmitted_SubmitsToLinkRepo()
         {
