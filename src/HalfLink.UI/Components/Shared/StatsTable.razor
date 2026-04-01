@@ -1,0 +1,18 @@
+﻿<MudTable Items="Stats" Hover="true" Style="width:100%">
+    <ToolBarContent>
+        <MudText Typo="Typo.h6">HalfLink History</MudText>
+    </ToolBarContent>
+    <HeaderContent>
+        <MudTh Style="white-space:nowrap;width:1%">Access Time</MudTh>
+        <MudTh>Referrer</MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd DataLabel="Access Time" Style="white-space:nowrap">@context.AccessedAt</MudTd>
+        <MudTd DataLabel="Referrer">@context.Referrer</MudTd>
+    </RowTemplate>
+</MudTable>
+
+@code {
+    [Parameter]
+    public IEnumerable<LinkStat> Stats { get; set; } = Enumerable.Empty<LinkStat>();
+}
