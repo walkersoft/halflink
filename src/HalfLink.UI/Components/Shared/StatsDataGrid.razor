@@ -1,0 +1,18 @@
+﻿<MudDataGrid T="LinkStat" Items="Stats" Class="mud-width-full" ColumnResizeMode="ResizeMode.Column">
+    <ToolBarContent>
+        <MudText Typo="Typo.h6">HalfLink History</MudText>
+    </ToolBarContent>
+    <ColGroup>
+        <col style="min-width: 200px;" />
+        <col style="min-width: 500px;" />
+    </ColGroup>
+    <Columns>
+        <PropertyColumn Property="x => x.AccessedAt.ToLocalTime()" Title="Access Time" Sortable="true" />
+        <PropertyColumn Property="x => x.Referrer" Title="Referrer" Sortable="true" Groupable="true" />
+    </Columns>
+</MudDataGrid>
+
+@code {
+    [Parameter]
+    public IEnumerable<LinkStat> Stats { get; set; } = Enumerable.Empty<LinkStat>();
+}
