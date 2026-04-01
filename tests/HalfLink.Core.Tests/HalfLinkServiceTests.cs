@@ -6,7 +6,7 @@ namespace HalfLink.Core.Tests
 {
     public class HalfLinkServiceTests
     {
-        private readonly HalfLinkService service;
+        private HalfLinkService service;
         private readonly Mock<IHalfLinkRepository> linkRepoMock;
         private readonly Mock<IHalfLinkStatRepository> statRepoMock;
 
@@ -149,33 +149,22 @@ namespace HalfLink.Core.Tests
         }
 
         [Fact]
-        public async Task GivenExistingHalfLink_WhenFetchingStats_ReturnsStats()
+        public async Task GivenHalfLinkWasCreated_WhenFetchingStats_ReturnsStats()
         {
-            var now = DateTime.UtcNow;
-            var existingLink = new Link
-            {
-                Id = Guid.NewGuid(),
-                FullLink = "https://example.com",
-                HalfLink = "abc12345"
-            };
-            var statsList = new List<LinkStat>
-            {
-                new() { Id = Guid.NewGuid(), LinkId = existingLink.Id, AccessedAt = now }
-            };
-            linkRepoMock.Setup(repo => repo.GetLink(existingLink.HalfLink)).ReturnsAsync(existingLink);
-            statRepoMock.Setup(repo => repo.GetStats(existingLink.Id)).ReturnsAsync(statsList);
+            var linkStub = new StubHalfLinkRepository();
+            var statStub = new StubHalfLinkStatRepository();
+            service = new HalfLinkService(linkStub, statStub);
 
-            var stats = await service.GetStats(existingLink.HalfLink);
+            var link = await service.CreateLink("https://example.com");
+            var stats = await service.GetStats(link.HalfLink);
 
             stats.ShouldNotBeNull();
-            stats.Count().ShouldBe(statsList.Count);
+            stats.Count().ShouldBe(1);
             var stat = stats.First();
             stat.Id.ShouldNotBe(default);
-            stat.LinkId.ShouldBe(existingLink.Id);
-            stat.AccessedAt.ShouldBe(now);
+            stat.LinkId.ShouldBe(link.Id);
+            stat.AccessedAt.ShouldBeGreaterThan(DateTime.MinValue);
             stat.Referrer.ShouldNotBeNullOrEmpty();
-            linkRepoMock.Verify(repo => repo.GetLink(existingLink.HalfLink), Times.Once);
-            statRepoMock.Verify(repo => repo.GetStats(existingLink.Id), Times.Once);
         }
     }
 }

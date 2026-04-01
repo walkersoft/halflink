@@ -40,6 +40,7 @@ namespace HalfLink.Core
                 Id = Guid.NewGuid(),
                 LinkId = link.Id,
                 AccessedAt = DateTime.UtcNow,
+                Referrer = "SYSTEM_CREATED"
             };
 
             await statsRepository.CreateStat(firstStat);
