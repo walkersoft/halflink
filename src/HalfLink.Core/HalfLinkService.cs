@@ -40,7 +40,6 @@ namespace HalfLink.Core
                 Id = Guid.NewGuid(),
                 LinkId = link.Id,
                 AccessedAt = DateTime.UtcNow,
-                Referrer = "SYSTEM_CREATED"
             };
 
             await statsRepository.CreateStat(firstStat);
@@ -80,6 +79,14 @@ namespace HalfLink.Core
             }
 
             return new string([.. chars]);
+        }
+
+        public async Task<IEnumerable<LinkStat>> GetStats(string halfLink)
+        {
+            var link = await linksRepository.GetLink(halfLink);
+            if (link is null) return [];
+
+            return await statsRepository.GetStats(link.Id);
         }
     }
 }

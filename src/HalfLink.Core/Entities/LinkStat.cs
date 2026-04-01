@@ -4,7 +4,7 @@
     {
         public Guid Id { get; set; }
         public Guid LinkId { get; set; }
-        public string Referrer { get; set; } = string.Empty;
+        public string Referrer { get; set; } = "SYSTEM";
         public DateTime AccessedAt { get; set; }
     }
 }

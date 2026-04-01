@@ -132,5 +132,50 @@ namespace HalfLink.Core.Tests
             linkRepoMock.Verify(repo => repo.GetLink(halfLink), Times.Once);
             linkRepoMock.VerifyNoOtherCalls();
         }
+
+        [Fact]
+        public async Task GivenNonExistingHalfLink_WhenFetchingStats_ReturnsEmpty()
+        {
+            var halfLink = "abc12345";
+            linkRepoMock.Setup(repo => repo.GetLink(halfLink)).ReturnsAsync((Link?)null);
+            statRepoMock.Setup(repo => repo.GetStats(It.IsAny<Guid>())).ReturnsAsync([]);
+
+            var stats = await service.GetStats(halfLink);
+
+            stats.ShouldNotBeNull();
+            stats.ShouldBeEmpty();
+            linkRepoMock.Verify(repo => repo.GetLink(halfLink), Times.Once);
+            statRepoMock.Verify(repo => repo.GetStats(It.IsAny<Guid>()), Times.Never);
+        }
+
+        [Fact]
+        public async Task GivenExistingHalfLink_WhenFetchingStats_ReturnsStats()
+        {
+            var now = DateTime.UtcNow;
+            var existingLink = new Link
+            {
+                Id = Guid.NewGuid(),
+                FullLink = "https://example.com",
+                HalfLink = "abc12345"
+            };
+            var statsList = new List<LinkStat>
+            {
+                new() { Id = Guid.NewGuid(), LinkId = existingLink.Id, AccessedAt = now }
+            };
+            linkRepoMock.Setup(repo => repo.GetLink(existingLink.HalfLink)).ReturnsAsync(existingLink);
+            statRepoMock.Setup(repo => repo.GetStats(existingLink.Id)).ReturnsAsync(statsList);
+
+            var stats = await service.GetStats(existingLink.HalfLink);
+
+            stats.ShouldNotBeNull();
+            stats.Count().ShouldBe(statsList.Count);
+            var stat = stats.First();
+            stat.Id.ShouldNotBe(default);
+            stat.LinkId.ShouldBe(existingLink.Id);
+            stat.AccessedAt.ShouldBe(now);
+            stat.Referrer.ShouldNotBeNullOrEmpty();
+            linkRepoMock.Verify(repo => repo.GetLink(existingLink.HalfLink), Times.Once);
+            statRepoMock.Verify(repo => repo.GetStats(existingLink.Id), Times.Once);
+        }
     }
 }
