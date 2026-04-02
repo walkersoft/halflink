@@ -7,7 +7,7 @@ namespace HalfLink.Data
 {
     public static class ConfigureAzureServices
     {
-        public static IServiceCollection CongigureAzure(this IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection ConfigureAzure(this IServiceCollection services, IConfiguration configuration)
         {
             services.Configure<AzureSettings>(configuration.GetSection(nameof(AzureSettings)));
             services.ConfigureAzureQueue(configuration);
@@ -30,6 +30,7 @@ namespace HalfLink.Data
 
                 return queueService;
             });
+            services.AddSingleton<HalfLinkActivityQueue>();
 
         }
     }

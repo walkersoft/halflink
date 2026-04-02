@@ -12,8 +12,10 @@ builder.Services.AddMudServices();
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
+builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddApplicationServices();
+builder.Services.ConfigureAzure(builder.Configuration);
 builder.Services.ConfigureCosmos(builder.Configuration);
 
 var app = builder.Build();
