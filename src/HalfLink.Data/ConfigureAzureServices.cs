@@ -19,13 +19,18 @@ namespace HalfLink.Data
             services.AddSingleton(provider => provider.GetRequiredService<IOptions<AzureSettings>>().Value);
             services.AddSingleton(provider =>
             {
-                var queueSettings = provider.GetRequiredService<AzureSettings>().Queue;
+                var queueSettings = provider.GetRequiredService<AzureSettings>().QueueSettings;
                 ArgumentNullException.ThrowIfNull(queueSettings, nameof(queueSettings));
                 ArgumentException.ThrowIfNullOrEmpty(queueSettings.ConnectionString, nameof(queueSettings.ConnectionString));
                 ArgumentException.ThrowIfNullOrEmpty(queueSettings.QueueName, nameof(queueSettings.QueueName));
 
-                return new QueueServiceClient(queueSettings.ConnectionString);
+                var queueService = new QueueServiceClient(queueSettings.ConnectionString);
+                var queueClient = queueService.GetQueueClient(queueSettings.QueueName);
+                queueClient.CreateIfNotExists();
+
+                return queueService;
             });
+
         }
     }
 }
