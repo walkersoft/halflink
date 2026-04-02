@@ -1,0 +1,31 @@
+﻿using Azure.Storage.Queues;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
+
+namespace HalfLink.Data
+{
+    public static class ConfigureAzureServices
+    {
+        public static IServiceCollection CongigureAzure(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.Configure<AzureSettings>(configuration.GetSection(nameof(AzureSettings)));
+            services.ConfigureAzureQueue(configuration);
+            return services;
+        }
+
+        private static void ConfigureAzureQueue(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.AddSingleton(provider => provider.GetRequiredService<IOptions<AzureSettings>>().Value);
+            services.AddSingleton(provider =>
+            {
+                var queueSettings = provider.GetRequiredService<AzureSettings>().Queue;
+                ArgumentNullException.ThrowIfNull(queueSettings, nameof(queueSettings));
+                ArgumentException.ThrowIfNullOrEmpty(queueSettings.ConnectionString, nameof(queueSettings.ConnectionString));
+                ArgumentException.ThrowIfNullOrEmpty(queueSettings.QueueName, nameof(queueSettings.QueueName));
+
+                return new QueueServiceClient(queueSettings.ConnectionString);
+            });
+        }
+    }
+}
