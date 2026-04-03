@@ -28,6 +28,20 @@ namespace HalfLink.UI
 
                 return Results.Redirect(link.FullLink);
             });
+
+            builder.MapPost(
+                "/s/click",
+                async ([FromBody] ClickActivityEvent clickActivityEvent, HalfLinkService halfLinkService) =>
+            {
+                await halfLinkService.CreateStat(new()
+                {
+                    Id = Guid.NewGuid(),
+                    LinkId = clickActivityEvent.LinkId,
+                    Referrer = clickActivityEvent.Referrer,
+                    AccessedAt = clickActivityEvent.ClickedAt
+                });
+                return Results.Ok();
+            });
         }
     }
 }

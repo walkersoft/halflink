@@ -89,5 +89,7 @@ namespace HalfLink.Core
 
             return await statsRepository.GetStats(link.Id);
         }
+
+        public Task CreateStat(LinkStat stat) => statsRepository.CreateStat(stat);
     }
 }
