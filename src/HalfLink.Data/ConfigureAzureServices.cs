@@ -10,13 +10,13 @@ namespace HalfLink.Data
         public static IServiceCollection ConfigureAzure(this IServiceCollection services, IConfiguration configuration)
         {
             services.Configure<AzureSettings>(configuration.GetSection(nameof(AzureSettings)));
-            services.ConfigureAzureQueue(configuration);
+            services.AddSingleton(provider => provider.GetRequiredService<IOptions<AzureSettings>>().Value);
+            services.ConfigureAzureQueue();
             return services;
         }
 
-        private static void ConfigureAzureQueue(this IServiceCollection services, IConfiguration configuration)
+        private static void ConfigureAzureQueue(this IServiceCollection services)
         {
-            services.AddSingleton(provider => provider.GetRequiredService<IOptions<AzureSettings>>().Value);
             services.AddSingleton(provider =>
             {
                 var queueSettings = provider.GetRequiredService<AzureSettings>().QueueSettings;
@@ -31,7 +31,6 @@ namespace HalfLink.Data
                 return queueService;
             });
             services.AddSingleton<HalfLinkActivityQueue>();
-
         }
     }
 }
