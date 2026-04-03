@@ -12,9 +12,9 @@ builder.Services
     .AddApplicationInsightsTelemetryWorkerService()
     .ConfigureFunctionsApplicationInsights();
 
-builder.Services.AddHttpClient("HalfLinkApi", client =>
+builder.Services.AddHttpClient("HalfLinkApiClient", client =>
 {
-    var halfLinkUrl = builder.Configuration.GetValue<string>("HalfLinkApiClient");
+    var halfLinkUrl = builder.Configuration.GetValue<string>("HalfLinkApiUrl");
     ArgumentException.ThrowIfNullOrWhiteSpace(halfLinkUrl, nameof(halfLinkUrl));
 
     client.BaseAddress = new Uri(halfLinkUrl);
