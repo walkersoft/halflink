@@ -19,12 +19,7 @@ namespace HalfLink.UI
                     ? "SYSTEM_UNKNOWN"
                     : $"{httpContextAccessor.HttpContext.Request.Headers.Referer}";
 
-                await halfLinkActivityQueue.AddClickActivity(new ClickActivityEvent
-                {
-                    LinkId = link.Id,
-                    Referrer = referrer,
-                    ClickedAt = DateTime.UtcNow
-                });
+                await halfLinkActivityQueue.AddClickActivity(new ClickActivityEvent(link.Id, referrer, DateTime.UtcNow));
 
                 return Results.Redirect(link.FullLink);
             });
