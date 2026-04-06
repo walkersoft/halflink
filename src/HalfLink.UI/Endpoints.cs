@@ -16,7 +16,7 @@ namespace HalfLink.UI
                 if (link is null) return Results.Redirect("/not-found");
 
                 var referrer = string.IsNullOrWhiteSpace(httpContextAccessor?.HttpContext?.Request.Headers.Referer)
-                    ? "SYSTEM_UNKNOWN"
+                    ? "REFERRER_UNKNOWN"
                     : $"{httpContextAccessor.HttpContext.Request.Headers.Referer}";
 
                 await halfLinkActivityQueue.AddClickActivity(new ClickActivityEvent(link.Id, referrer, DateTime.UtcNow));

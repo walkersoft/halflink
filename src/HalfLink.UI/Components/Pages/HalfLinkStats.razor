@@ -1,0 +1,26 @@
+﻿@page "/l/{HalfLink}/stats"
+@using HalfLink.UI.Components.Shared
+@inject HalfLinkService HalfLinkService
+
+@if (link is not null)
+{
+    <MudContainer MaxWidth="MaxWidth.Large" Class="mx-auto mt-5">
+        <MudText Typo="Typo.h4">Stats for: @link.FullLink</MudText>
+        <StatsDataGrid Stats="stats" />
+    </MudContainer>
+}
+
+@code {
+    [Parameter]
+    public string HalfLink { get; set; } = string.Empty;
+
+    private Link? link = default;
+    private IEnumerable<LinkStat> stats = Enumerable.Empty<LinkStat>();
+
+    protected override async Task OnParametersSetAsync()
+    {
+        link = await HalfLinkService.GetLink(HalfLink);
+        stats = await HalfLinkService.GetStats(HalfLink);
+        await base.OnParametersSetAsync();
+    }
+}

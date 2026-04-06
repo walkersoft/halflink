@@ -21,6 +21,8 @@
                         <MudTextField @bind-Value="targetUrl"
                                       Variant="Variant.Outlined"
                                       Label="URL to Shorten"
+                                      Required="true"
+                                      RequiredError="A URL to shorten is required"
                                       Error="isError"
                                       ErrorText="@errorMessage" />
                     </MudItem>
@@ -39,7 +41,7 @@
         
         @if (createdLink is not null)
         {
-            <MudItem xs="12">
+            <MudItem xs="6">
                 <MudStack AlignItems="AlignItems.Center" Class="mt-5">
                     <MudText Typo="Typo.h6" GutterBottom="true">Shortened URL</MudText>
                     <MudText>
@@ -48,8 +50,20 @@
                             <MudIcon Icon="@Icons.Material.Filled.OpenInNew" Size="Size.Small" Class="ml-1" />
                         </MudLink>
                     </MudText>
-                    <StatsDataGrid Stats="initialStats" />
                 </MudStack>
+            </MudItem>
+            <MudItem xs="6">
+                <MudStack AlignItems="AlignItems.Center" Class="mt-5">
+                    <MudText Typo="Typo.h6" GutterBottom="true">Click Stats</MudText>
+                    <MudText>
+                        <MudLink Href="@statsUrl" Class="d-flex align-center">
+                            @statsUrl
+                        </MudLink>
+                    </MudText>
+                </MudStack>
+            </MudItem>
+            <MudItem xs="12">
+                <StatsDataGrid Stats="initialStats" />
             </MudItem>
         }
     </MudGrid>
@@ -61,6 +75,7 @@
     private string errorMessage = string.Empty;
     private Link? createdLink;
     private string createdLinkUrl = string.Empty;
+    private string statsUrl = string.Empty;
     private IEnumerable<LinkStat> initialStats = Enumerable.Empty<LinkStat>();
 
     private async Task ShortenUrl()
@@ -72,6 +87,8 @@
             createdLink = await HalfLinkService.CreateLink(targetUrl);
             initialStats = await LoadInitialStats(createdLink.HalfLink);
             createdLinkUrl = GetHalfLinkUrl(createdLink);
+            statsUrl = $"{createdLinkUrl}/stats";
+
         }
         catch (ArgumentException e)
         {
