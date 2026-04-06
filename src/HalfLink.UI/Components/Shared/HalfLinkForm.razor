@@ -1,0 +1,49 @@
+﻿@inject HalfLinkService HalfLinkService
+
+<MudForm>
+    <MudGrid>
+        <MudItem xs="12">
+            <MudTextField @bind-Value="targetUrl"
+                          Variant="Variant.Outlined"
+                          Label="URL to Shorten"
+                          Required="true"
+                          RequiredError="A URL to shorten is required"
+                          Error="isError"
+                          ErrorText="@errorMessage" />
+        </MudItem>
+        <MudItem xs="3" Class="mx-auto">
+            <MudButton Variant="Variant.Filled"
+                       Color="Color.Primary"
+                       Size="Size.Large"
+                       FullWidth="true"
+                       OnClick="ShortenUrl">
+                Shorten It!
+            </MudButton>
+        </MudItem>
+    </MudGrid>
+</MudForm>
+
+@code {
+    [Parameter]
+    public EventCallback<Link> OnLinkCreated { get; set; }
+
+    private string targetUrl = string.Empty;
+    private bool isError = false;
+    private string errorMessage = string.Empty;
+    private async Task ShortenUrl()
+    {
+        try
+        {
+            isError = false;
+            errorMessage = string.Empty;
+
+            var createdLink = await HalfLinkService.CreateLink(targetUrl);
+            await OnLinkCreated.InvokeAsync(createdLink);
+        }
+        catch (ArgumentException e)
+        {
+            isError = true;
+            errorMessage = e.Message;
+        }
+    }
+}
