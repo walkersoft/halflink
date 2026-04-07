@@ -4,8 +4,12 @@
 
 @if (link is not null)
 {
-    <MudContainer MaxWidth="MaxWidth.Large" Class="mx-auto mt-5">
-        <MudText Typo="Typo.h4">Stats for: @link.FullLink</MudText>
+    <MudContainer MaxWidth="MaxWidth.Large" Class="mx-auto my-5">
+        <MudText Typo="Typo.h4"
+                 Class="overflow-x-hidden mb-3"
+                 Style="text-overflow: ellipsis; text-wrap-mode: nowrap;">
+            Stats for: @link.FullLink
+        </MudText>
         <StatsDataGrid Stats="stats" />
     </MudContainer>
 }
