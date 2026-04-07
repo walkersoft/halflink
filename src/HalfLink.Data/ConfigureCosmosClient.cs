@@ -6,9 +6,9 @@ using Microsoft.Extensions.Options;
 
 namespace HalfLink.Data
 {
-    public static class ConfigureCosmosClient
+    internal static class ConfigureCosmosClient
     {
-        public static IServiceCollection ConfigureCosmos(this IServiceCollection services, IConfiguration configuration)
+        internal static IServiceCollection ConfigureCosmos(this IServiceCollection services, IConfiguration configuration)
         {
             services.Configure<CosmosSettings>(configuration.GetSection(nameof(CosmosSettings)));
             services.AddSingleton(provider => provider.GetRequiredService<IOptions<CosmosSettings>>().Value);

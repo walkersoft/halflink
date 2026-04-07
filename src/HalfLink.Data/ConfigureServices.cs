@@ -5,9 +5,12 @@ namespace HalfLink.Data
 {
     public static class ConfigureServices
     {
-        public static IServiceCollection ConfigureDataServices(this IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection AddDataServices(this IServiceCollection services, IConfiguration configuration)
         {
+            services.ConfigureCosmos(configuration);
+            services.ConfigureAzure(configuration);
             services.AddScoped<LocalLinkStore>();
+
             return services;
         }
     }

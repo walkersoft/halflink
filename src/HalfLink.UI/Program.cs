@@ -15,8 +15,7 @@ builder.Services.AddRazorComponents()
 builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddApplicationServices();
-builder.Services.ConfigureAzure(builder.Configuration);
-builder.Services.ConfigureCosmos(builder.Configuration);
+builder.Services.AddDataServices(builder.Configuration);
 
 var app = builder.Build();
 

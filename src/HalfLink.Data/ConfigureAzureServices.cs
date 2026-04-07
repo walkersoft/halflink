@@ -5,9 +5,9 @@ using Microsoft.Extensions.Options;
 
 namespace HalfLink.Data
 {
-    public static class ConfigureAzureServices
+    internal static class ConfigureAzureServices
     {
-        public static IServiceCollection ConfigureAzure(this IServiceCollection services, IConfiguration configuration)
+        internal static IServiceCollection ConfigureAzure(this IServiceCollection services, IConfiguration configuration)
         {
             services.Configure<AzureSettings>(configuration.GetSection(nameof(AzureSettings)));
             services.AddSingleton(provider => provider.GetRequiredService<IOptions<AzureSettings>>().Value);
