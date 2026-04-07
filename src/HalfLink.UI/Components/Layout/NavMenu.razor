@@ -1,10 +1,42 @@
-﻿
+﻿@using HalfLink.Data
+@inject LocalLinkStore LocalLinkStore
+@implements IDisposable
+
 <MudNavMenu>
     <MudNavLink Href="" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Home">Home</MudNavLink>
-    <MudNavLink Href="counter" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.Add">Counter</MudNavLink>
-    
-    <MudNavLink Href="weather" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Filled.List">Weather</MudNavLink>
-
+    <MudDivider Class="my-2" />
+    @foreach (var link in localLinks)
+    {
+        <MudTooltip Text="@link.FullLink" Arrow="true" Placement="Placement.Right">
+            <MudNavLink Href="@($"/l/{link.HalfLink}/stats")"
+                        Match="NavLinkMatch.All">
+                @link.FullLink
+            </MudNavLink>
+        </MudTooltip>
+    }
 </MudNavMenu>
 
+@code {
 
+    private IReadOnlyList<Link> localLinks = [];
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            LocalLinkStore.OnLinksChanged += OnLinksChanged;
+            await OnLinksChanged();
+        }
+    }
+
+    private async Task OnLinksChanged()
+    {
+        localLinks = await LocalLinkStore.GetLocalLinks();
+        await InvokeAsync(StateHasChanged);
+    }
+
+    public void Dispose()
+    {
+        LocalLinkStore.OnLinksChanged -= OnLinksChanged;
+    }
+}

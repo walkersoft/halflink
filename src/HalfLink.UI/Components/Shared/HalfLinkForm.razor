@@ -1,4 +1,6 @@
-﻿@inject HalfLinkService HalfLinkService
+﻿@using HalfLink.Data
+@inject HalfLinkService HalfLinkService
+@inject LocalLinkStore LocalLinkStore
 
 <MudForm>
     <MudGrid>
@@ -30,6 +32,7 @@
     private string targetUrl = string.Empty;
     private bool isError = false;
     private string errorMessage = string.Empty;
+
     private async Task ShortenUrl()
     {
         try
@@ -39,6 +42,7 @@
 
             var createdLink = await HalfLinkService.CreateLink(targetUrl);
             await OnLinkCreated.InvokeAsync(createdLink);
+            await LocalLinkStore.AddLink(createdLink);
         }
         catch (ArgumentException e)
         {
