@@ -2,19 +2,22 @@
 @inject LocalLinkStore LocalLinkStore
 @implements IDisposable
 
-<MudNavMenu>
-    <MudNavLink Href="" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Home">Home</MudNavLink>
-    <MudDivider Class="my-2" />
-    @foreach (var link in localLinks)
-    {
-        <MudTooltip Text="@link.FullLink" Arrow="true" Placement="Placement.Right">
-            <MudNavLink Href="@($"/l/{link.HalfLink}/stats")"
-                        Match="NavLinkMatch.All">
-                @link.FullLink
-            </MudNavLink>
-        </MudTooltip>
-    }
-</MudNavMenu>
+<div>
+    <MudNavMenu>
+        <MudNavLink Href="" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Home">Home</MudNavLink>
+        <MudDivider Class="my-2" />
+        @foreach (var link in localLinks)
+        {
+            <MudTooltip Text="@link.FullLink" Arrow="true" Placement="Placement.Right">
+                <MudNavLink Href="@($"/l/{link.HalfLink}/stats")"
+                            Match="NavLinkMatch.All"
+                            Style="max-width: 240px">
+                    @link.FullLink
+                </MudNavLink>
+            </MudTooltip>
+        }
+    </MudNavMenu>
+</div>
 
 @code {
 
