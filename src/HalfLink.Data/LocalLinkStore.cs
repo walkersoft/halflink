@@ -7,7 +7,7 @@ namespace HalfLink.Data
 {
     public class LocalLinkStore(IJSRuntime js)
     {
-        private readonly IJSRuntime js;
+        private readonly IJSRuntime js = js;
         private const string STORAGE_KEY = "localLinks";
         private List<Link>? links;
 
