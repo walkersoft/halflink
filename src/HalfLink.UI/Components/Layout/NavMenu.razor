@@ -11,8 +11,8 @@
             <MudTooltip Text="@link.FullLink" Arrow="true" Placement="Placement.Right">
                 <MudNavLink Href="@($"/l/{link.HalfLink}/stats")"
                             Match="NavLinkMatch.All"
-                            Style="max-width: 240px">
-                    @link.FullLink
+                            Style="width: 240px">
+                    @(!string.IsNullOrWhiteSpace(link.Description) ? link.Description : link.FullLink)
                 </MudNavLink>
             </MudTooltip>
         }

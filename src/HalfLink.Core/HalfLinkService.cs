@@ -9,7 +9,7 @@ namespace HalfLink.Core
 
         public async Task<Link?> GetLink(string halfLink) => await linksRepository.GetLink(halfLink);
 
-        public async Task<Link> CreateLink(string url)
+        public async Task<Link> CreateLink(string url, string? description = null)
         {
             ArgumentException.ThrowIfNullOrWhiteSpace(url, nameof(url));
             url = url.ToLower().Trim();
@@ -30,7 +30,8 @@ namespace HalfLink.Core
             {
                 Id = Guid.NewGuid(),
                 FullLink = url,
-                HalfLink = halfLink
+                HalfLink = halfLink,
+                Description = description,
             };
 
             await linksRepository.CreateLink(link);

@@ -4,7 +4,7 @@
 
 <MudForm>
     <MudGrid>
-        <MudItem xs="12">
+        <MudItem xs="8">
             <MudTextField @bind-Value="targetUrl"
                           Variant="Variant.Outlined"
                           Label="URL to Shorten"
@@ -12,6 +12,11 @@
                           RequiredError="A URL to shorten is required"
                           Error="isError"
                           ErrorText="@errorMessage" />
+        </MudItem>
+        <MudItem xs="4">
+            <MudTextField @bind-Value="description"
+                          Variant="Variant.Outlined"
+                          Label="Description (Optional)" />
         </MudItem>
         <MudItem xs="3" Class="mx-auto">
             <MudButton Variant="Variant.Filled"
@@ -29,6 +34,7 @@
     [Parameter]
     public EventCallback<Link> OnLinkCreated { get; set; }
 
+    private string? description = null;
     private string targetUrl = string.Empty;
     private bool isError = false;
     private string errorMessage = string.Empty;
@@ -40,7 +46,7 @@
             isError = false;
             errorMessage = string.Empty;
 
-            var createdLink = await HalfLinkService.CreateLink(targetUrl);
+            var createdLink = await HalfLinkService.CreateLink(targetUrl, description);
             await OnLinkCreated.InvokeAsync(createdLink);
             await LocalLinkStore.AddLink(createdLink);
         }

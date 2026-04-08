@@ -2,8 +2,9 @@
 {
     public class Link
     {
-        public Guid Id { get; set; }
-        public string FullLink { get; set; } = string.Empty;
-        public string HalfLink { get; set; } = string.Empty;
+        public required Guid Id { get; set; }
+        public string? Description { get; set; }
+        public required string FullLink { get; set; }
+        public required string HalfLink { get; set; }
     }
 }

@@ -65,6 +65,17 @@ namespace HalfLink.Core.Tests
             link.FullLink.ShouldBe("https://example.com");
         }
 
+        [Theory]
+        [InlineData("https://example.com", "Description")]
+        [InlineData("https://example.com", null)]
+        public async Task GivenValidUrlWithOptionalDescription_WhenSubmitted_HasOptionalDescription(string url, string? description)
+        {
+            var link = await service.CreateLink(url, description);
+
+            link.ShouldNotBeNull();
+            link.FullLink.ShouldBe("https://example.com");
+        }
+
         [Fact]
         public async Task GivenValidUrl_WhenSubmitted_SubmitsToLinkRepo()
         {
