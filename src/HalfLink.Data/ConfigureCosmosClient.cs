@@ -1,4 +1,5 @@
-﻿using HalfLink.Core;
+﻿using Azure.Identity;
+using HalfLink.Core;
 using Microsoft.Azure.Cosmos;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -16,22 +17,28 @@ namespace HalfLink.Data
             {
                 var cosmosSettings = provider.GetRequiredService<CosmosSettings>();
 
-                ArgumentException.ThrowIfNullOrWhiteSpace(cosmosSettings.Endpoint, nameof(cosmosSettings.Endpoint));
-                ArgumentException.ThrowIfNullOrWhiteSpace(cosmosSettings.Key, nameof(cosmosSettings.Key));
                 ArgumentException.ThrowIfNullOrWhiteSpace(cosmosSettings.DatabaseName, nameof(cosmosSettings.DatabaseName));
                 ArgumentException.ThrowIfNullOrWhiteSpace(cosmosSettings.LinksContainer, nameof(cosmosSettings.LinksContainer));
                 ArgumentException.ThrowIfNullOrWhiteSpace(cosmosSettings.StatsContainer, nameof(cosmosSettings.StatsContainer));
                 var cosmosOptions = new CosmosClientOptions
                 {
                     ApplicationName = "HalfLink",
-                    ConnectionMode = ConnectionMode.Gateway,
-                    LimitToEndpoint = true,
                     SerializerOptions = new CosmosSerializationOptions
                     {
                         PropertyNamingPolicy = CosmosPropertyNamingPolicy.CamelCase,
                     }
                 };
 
+                if (cosmosSettings.UseManagedIdentity)
+                {
+                    ArgumentException.ThrowIfNullOrWhiteSpace(cosmosSettings.Endpoint, nameof(cosmosSettings.Endpoint));
+                    return new CosmosClient(cosmosSettings.Endpoint, new DefaultAzureCredential(), cosmosOptions);
+                }
+
+                ArgumentException.ThrowIfNullOrWhiteSpace(cosmosSettings.Endpoint, nameof(cosmosSettings.Endpoint));
+                ArgumentException.ThrowIfNullOrWhiteSpace(cosmosSettings.Key, nameof(cosmosSettings.Key));
+                cosmosOptions.LimitToEndpoint = true;
+                cosmosOptions.ConnectionMode = ConnectionMode.Gateway;
                 return new CosmosClient(cosmosSettings.Endpoint, cosmosSettings.Key, cosmosOptions);
             });
 

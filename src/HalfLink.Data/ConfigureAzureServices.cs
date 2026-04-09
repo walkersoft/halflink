@@ -1,4 +1,5 @@
-﻿using Azure.Storage.Queues;
+﻿using Azure.Identity;
+using Azure.Storage.Queues;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -19,12 +20,22 @@ namespace HalfLink.Data
         {
             services.AddSingleton(provider =>
             {
-                var queueSettings = provider.GetRequiredService<AzureSettings>().QueueSettings;
-                ArgumentNullException.ThrowIfNull(queueSettings, nameof(queueSettings));
-                ArgumentException.ThrowIfNullOrEmpty(queueSettings.ConnectionString, nameof(queueSettings.ConnectionString));
+                var azureSettings = provider.GetRequiredService<AzureSettings>();
+                var queueSettings = azureSettings.QueueSettings;
                 ArgumentException.ThrowIfNullOrEmpty(queueSettings.QueueName, nameof(queueSettings.QueueName));
 
-                var queueService = new QueueServiceClient(queueSettings.ConnectionString);
+                QueueServiceClient queueService;
+                if (azureSettings.UseManagedIdentity)
+                {
+                    ArgumentException.ThrowIfNullOrEmpty(queueSettings.ServiceUri, nameof(queueSettings.ServiceUri));
+                    queueService = new QueueServiceClient(new Uri(queueSettings.ServiceUri), new DefaultAzureCredential());
+                }
+                else
+                {
+                    ArgumentException.ThrowIfNullOrEmpty(queueSettings.ConnectionString, nameof(queueSettings.ConnectionString));
+                    queueService = new QueueServiceClient(queueSettings.ConnectionString);
+                }
+
                 var queueClient = queueService.GetQueueClient(queueSettings.QueueName);
                 queueClient.CreateIfNotExists();
 

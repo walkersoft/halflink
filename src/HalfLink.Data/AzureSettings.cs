@@ -2,12 +2,14 @@
 {
     public class AzureSettings
     {
-        public QueueSettings QueueSettings { get; set; } = new QueueSettings();
+        public bool UseManagedIdentity { get; set; }
+        public required QueueSettings QueueSettings { get; set; }
     }
 
     public class QueueSettings
     {
-        public string QueueName { get; set; } = string.Empty;
+        public required string QueueName { get; set; }
         public string ConnectionString { get; set; } = string.Empty;
+        public string ServiceUri { get; set; } = string.Empty;
     }
 }
