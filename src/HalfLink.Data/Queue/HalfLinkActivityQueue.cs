@@ -1,9 +1,9 @@
-﻿using Azure.Storage.Queues;
+using Azure.Storage.Queues;
 using HalfLink.Core;
 using Microsoft.Extensions.Logging;
 using System.Text.Json;
 
-namespace HalfLink.Data
+namespace HalfLink.Data.Queue
 {
     internal class HalfLinkActivityQueue(AzureSettings azureSettings, QueueServiceClient queueServiceClient, ILogger<HalfLinkActivityQueue> logger) : IHalfLinkActivityService
     {

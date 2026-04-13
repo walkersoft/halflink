@@ -1,4 +1,4 @@
-﻿namespace HalfLink.Data
+namespace HalfLink.Data.Queue
 {
     public class AzureSettings
     {

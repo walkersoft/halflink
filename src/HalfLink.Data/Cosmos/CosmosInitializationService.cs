@@ -1,8 +1,8 @@
-﻿using Microsoft.Azure.Cosmos;
+using Microsoft.Azure.Cosmos;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace HalfLink.Data
+namespace HalfLink.Data.Cosmos
 {
     internal sealed class CosmosInitializationService(CosmosClient client, CosmosSettings settings, ILogger<CosmosInitializationService> logger) : IHostedService
     {

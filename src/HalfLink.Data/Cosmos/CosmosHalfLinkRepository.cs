@@ -1,8 +1,8 @@
-﻿using HalfLink.Core;
+using HalfLink.Core;
 using HalfLink.Core.Entities;
 using Microsoft.Azure.Cosmos;
 
-namespace HalfLink.Data
+namespace HalfLink.Data.Cosmos
 {
     internal sealed class CosmosHalfLinkRepository(CosmosClient client, CosmosSettings settings) : IHalfLinkRepository
     {

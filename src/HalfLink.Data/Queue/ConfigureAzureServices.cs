@@ -1,11 +1,11 @@
-﻿using Azure.Identity;
+using Azure.Identity;
 using Azure.Storage.Queues;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
-namespace HalfLink.Data
+namespace HalfLink.Data.Queue
 {
     internal static class ConfigureAzureServices
     {

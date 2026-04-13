@@ -1,11 +1,11 @@
-﻿using Azure.Identity;
+using Azure.Identity;
 using HalfLink.Core;
 using Microsoft.Azure.Cosmos;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 
-namespace HalfLink.Data
+namespace HalfLink.Data.Cosmos
 {
     internal static class ConfigureCosmosClient
     {

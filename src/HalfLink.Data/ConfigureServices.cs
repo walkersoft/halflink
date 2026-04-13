@@ -1,4 +1,6 @@
 ﻿using HalfLink.Core;
+using HalfLink.Data.Cosmos;
+using HalfLink.Data.Queue;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 

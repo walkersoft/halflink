@@ -1,4 +1,4 @@
-﻿namespace HalfLink.Data
+namespace HalfLink.Data.Cosmos
 {
     public class CosmosSettings
     {

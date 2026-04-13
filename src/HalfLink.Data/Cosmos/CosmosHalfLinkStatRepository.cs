@@ -1,9 +1,9 @@
-﻿using HalfLink.Core;
+using HalfLink.Core;
 using HalfLink.Core.Entities;
 using Microsoft.Azure.Cosmos;
 using Microsoft.Azure.Cosmos.Linq;
 
-namespace HalfLink.Data
+namespace HalfLink.Data.Cosmos
 {
     internal class CosmosHalfLinkStatRepository(CosmosClient client, CosmosSettings settings) : IHalfLinkStatRepository
     {
