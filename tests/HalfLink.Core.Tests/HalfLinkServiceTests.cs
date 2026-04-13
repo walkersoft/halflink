@@ -21,7 +21,9 @@ namespace HalfLink.Core.Tests
 
         [Theory]
         [InlineData("https://example.com")]
+        [InlineData("HTTPS://EXAMPLE.COM")]
         [InlineData("http://example.com")]
+        [InlineData("HTTP://EXAMPLE.COM")]
         [InlineData("www.example.com")]
         [InlineData("example.com")]
         [InlineData("https://example.com/segment")]

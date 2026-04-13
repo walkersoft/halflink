@@ -12,9 +12,9 @@ namespace HalfLink.Core
         public async Task<Link> CreateLink(string url, string? description = null)
         {
             ArgumentException.ThrowIfNullOrWhiteSpace(url, nameof(url));
-            url = url.ToLower().Trim();
+            url = url.Trim();
 
-            if (!url.StartsWith("http://") && !url.StartsWith("https://"))
+            if (!url.StartsWith("http://", StringComparison.InvariantCultureIgnoreCase) && !url.StartsWith("https://", StringComparison.InvariantCultureIgnoreCase))
             {
                 url = $"https://{url}";
             }
