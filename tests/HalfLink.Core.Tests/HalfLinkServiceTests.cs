@@ -32,7 +32,7 @@ namespace HalfLink.Core.Tests
         [InlineData("http://example.com/?query=param")]
         [InlineData("www.example.com/?query=param")]
         [InlineData("example.com/?query=param")]
-        public async Task GivenValidUrl_WhenSubmitted_CreatesCompleteHalfLink(string url)
+        public async Task GivenValidUrl_WhenSubmitted_CreatesValidHalfLink(string url)
         {
             var link = await service.CreateLink(url);
 
@@ -40,6 +40,20 @@ namespace HalfLink.Core.Tests
             link.Id.ShouldNotBe(default);
             link.FullLink.ShouldStartWith("http");
             link.HalfLink.Length.ShouldBe(8);
+        }
+
+        [Theory]
+        [InlineData("https://example.com", null)]
+        [InlineData("https://example.com", "Description")]
+        public async Task GivenValueUrl_WithOptionalDescription_CreatesValidHalfLink(string url, string? description)
+        {
+            var link = await service.CreateLink(url);
+
+            link.ShouldNotBeNull();
+            link.Id.ShouldNotBe(default);
+            link.FullLink.ShouldStartWith("http");
+            link.HalfLink.Length.ShouldBe(8);
+            link.Description.ShouldBe(description);
         }
 
         [Theory]
@@ -195,6 +209,22 @@ namespace HalfLink.Core.Tests
                 activityService.AddClickActivity(It.Is<ClickActivityEvent>(x => x == clickActivity)),
                 Times.Once
             );
+        }
+
+        [Fact]
+        public async Task GivenHalfLinkStat_WhenSubmitting_CreatesStatEntry()
+        {
+            var linkStat = new LinkStat()
+            {
+                Id = Guid.NewGuid(),
+                LinkId = Guid.NewGuid(),
+                Referrer = "TEST_SUITE",
+                AccessedAt = DateTime.UtcNow
+            };
+
+            await service.CreateStat(linkStat);
+
+            statRepoMock.Verify(repo => repo.CreateStat(It.Is<LinkStat>(x => x == linkStat)), Times.Once);
         }
     }
 }
