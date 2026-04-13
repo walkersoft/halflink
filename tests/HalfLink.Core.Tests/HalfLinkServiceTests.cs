@@ -9,12 +9,14 @@ namespace HalfLink.Core.Tests
         private HalfLinkService service;
         private readonly Mock<IHalfLinkRepository> linkRepoMock;
         private readonly Mock<IHalfLinkStatRepository> statRepoMock;
+        private readonly Mock<IHalfLinkActivityService> activityServiceMock;
 
         public HalfLinkServiceTests()
         {
             linkRepoMock = new Mock<IHalfLinkRepository>();
             statRepoMock = new Mock<IHalfLinkStatRepository>();
-            service = new HalfLinkService(linkRepoMock.Object, statRepoMock.Object);
+            activityServiceMock = new Mock<IHalfLinkActivityService>();
+            service = new HalfLinkService(linkRepoMock.Object, statRepoMock.Object, activityServiceMock.Object);
         }
 
         [Theory]
@@ -164,7 +166,7 @@ namespace HalfLink.Core.Tests
         {
             var linkStub = new StubHalfLinkRepository();
             var statStub = new StubHalfLinkStatRepository();
-            service = new HalfLinkService(linkStub, statStub);
+            service = new HalfLinkService(linkStub, statStub, activityServiceMock.Object);
 
             var link = await service.CreateLink("https://example.com");
             var stats = await service.GetStats(link.HalfLink);
@@ -176,6 +178,23 @@ namespace HalfLink.Core.Tests
             stat.LinkId.ShouldBe(link.Id);
             stat.AccessedAt.ShouldBeGreaterThan(DateTime.MinValue);
             stat.Referrer.ShouldNotBeNullOrEmpty();
+        }
+
+        [Fact]
+        public async Task GivenHalfLinkWasCreated_WhenClicked_AddsClickActivity()
+        {
+            var linkStub = new StubHalfLinkRepository();
+            var statStub = new StubHalfLinkStatRepository();
+            service = new HalfLinkService(linkStub, statStub, activityServiceMock.Object);
+            var link = await service.CreateLink("https://example.com");
+            var clickActivity = new ClickActivityEvent(link.Id, "TEST_SUITE", DateTime.UtcNow);
+
+            await service.AddClickActivity(clickActivity);
+
+            activityServiceMock.Verify(activityService =>
+                activityService.AddClickActivity(It.Is<ClickActivityEvent>(x => x == clickActivity)),
+                Times.Once
+            );
         }
     }
 }

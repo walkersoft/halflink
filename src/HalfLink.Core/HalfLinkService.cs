@@ -2,7 +2,7 @@
 
 namespace HalfLink.Core
 {
-    public sealed class HalfLinkService(IHalfLinkRepository linksRepository, IHalfLinkStatRepository statsRepository)
+    public sealed class HalfLinkService(IHalfLinkRepository linksRepository, IHalfLinkStatRepository statsRepository, IHalfLinkActivityService halfLinkActivityService)
     {
         const string HALF_LINK_CHARS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
         const int MAX_GENERATIONS = 3;
@@ -92,5 +92,7 @@ namespace HalfLink.Core
         }
 
         public Task CreateStat(LinkStat stat) => statsRepository.CreateStat(stat);
+
+        public Task AddClickActivity(ClickActivityEvent clickActivityEvent) => halfLinkActivityService.AddClickActivity(clickActivityEvent);
     }
 }

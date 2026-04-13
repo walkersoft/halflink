@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using HalfLink.Core;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace HalfLink.Data
@@ -9,6 +10,7 @@ namespace HalfLink.Data
         {
             services.ConfigureCosmos(configuration);
             services.ConfigureAzure(configuration);
+            services.AddSingleton<IHalfLinkActivityService, HalfLinkActivityQueue>();
             services.AddScoped<LocalLinkStore>();
 
             return services;

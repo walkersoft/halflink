@@ -1,5 +1,4 @@
 ﻿using HalfLink.Core;
-using HalfLink.Data;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HalfLink.UI
@@ -10,7 +9,7 @@ namespace HalfLink.UI
         {
             builder.MapGet(
                 "/l/{halfLink}",
-                async ([FromRoute] string halfLink, HalfLinkService halfLinkService, HalfLinkActivityQueue halfLinkActivityQueue, IHttpContextAccessor httpContextAccessor) =>
+                async ([FromRoute] string halfLink, HalfLinkService halfLinkService, IHttpContextAccessor httpContextAccessor) =>
             {
                 var link = await halfLinkService.GetLink(halfLink);
                 if (link is null) return Results.Redirect("/not-found");
@@ -19,7 +18,7 @@ namespace HalfLink.UI
                     ? "REFERRER_UNKNOWN"
                     : $"{httpContextAccessor.HttpContext.Request.Headers.Referer}";
 
-                await halfLinkActivityQueue.AddClickActivity(new ClickActivityEvent(link.Id, referrer, DateTime.UtcNow));
+                await halfLinkService.AddClickActivity(new ClickActivityEvent(link.Id, referrer, DateTime.UtcNow));
 
                 return Results.Redirect(link.FullLink);
             });
