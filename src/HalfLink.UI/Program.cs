@@ -18,6 +18,7 @@ builder.Services.AddApplicationServices();
 builder.Services.AddDataServices(builder.Configuration);
 
 var app = builder.Build();
+app.Logger.LogInformation("Starting HalfLink!");
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())

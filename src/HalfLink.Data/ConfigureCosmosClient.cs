@@ -32,13 +32,16 @@ namespace HalfLink.Data
                 if (cosmosSettings.UseManagedIdentity)
                 {
                     ArgumentException.ThrowIfNullOrWhiteSpace(cosmosSettings.Endpoint, nameof(cosmosSettings.Endpoint));
-                    return new CosmosClient(cosmosSettings.Endpoint, new DefaultAzureCredential(), cosmosOptions);
+                    cosmosOptions.ConnectionMode = ConnectionMode.Gateway;
+                    var credential = string.IsNullOrWhiteSpace(cosmosSettings.ManagedIdentityClientId)
+                        ? new DefaultAzureCredential()
+                        : new DefaultAzureCredential(new DefaultAzureCredentialOptions { ManagedIdentityClientId = cosmosSettings.ManagedIdentityClientId });
+                    return new CosmosClient(cosmosSettings.Endpoint, credential, cosmosOptions);
                 }
 
                 ArgumentException.ThrowIfNullOrWhiteSpace(cosmosSettings.Endpoint, nameof(cosmosSettings.Endpoint));
                 ArgumentException.ThrowIfNullOrWhiteSpace(cosmosSettings.Key, nameof(cosmosSettings.Key));
                 cosmosOptions.LimitToEndpoint = true;
-                cosmosOptions.ConnectionMode = ConnectionMode.Gateway;
                 return new CosmosClient(cosmosSettings.Endpoint, cosmosSettings.Key, cosmosOptions);
             });
 

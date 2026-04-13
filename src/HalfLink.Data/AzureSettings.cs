@@ -3,6 +3,7 @@
     public class AzureSettings
     {
         public bool UseManagedIdentity { get; set; }
+        public string ManagedIdentityClientId { get; set; } = string.Empty;
         public required QueueSettings QueueSettings { get; set; }
     }
 
