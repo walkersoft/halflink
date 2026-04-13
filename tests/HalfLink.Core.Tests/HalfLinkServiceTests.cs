@@ -47,7 +47,7 @@ namespace HalfLink.Core.Tests
         [InlineData("https://example.com", "Description")]
         public async Task GivenValueUrl_WithOptionalDescription_CreatesValidHalfLink(string url, string? description)
         {
-            var link = await service.CreateLink(url);
+            var link = await service.CreateLink(url, description);
 
             link.ShouldNotBeNull();
             link.Id.ShouldNotBe(default);
