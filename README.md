@@ -10,18 +10,26 @@ To run the application locally, you will need:
 - [.NET 10 SDK](https://dotnet.microsoft.com/en-us/download/dotnet/10.0)
 - [Azure Functions Core Tools v4](https://learn.microsoft.com/en-us/azure/azure-functions/functions-run-local)
 
+### Download the Code
+
+[Download a copy of the code](https://github.com/walkersoft/halflink/archive/refs/heads/master.zip), or use Git to clone the repository.
+
+```cli
+git clone https://github.com/walkersoft/halflink.git
+```
+
 ### Import the Cosmos Emulator SSL Certificate
 
-Instructions are available in [Microsoft's Cosmos DB emulator documentation](https://learn.microsoft.com/en-us/azure/cosmos-db/how-to-develop-emulator?tabs=docker-linux%2Ccsharp&pivots=api-nosql#import-the-emulators-tlsssl-certificate). This project uses the Linux-based Cosmos DB emulator image, and the linked guidance covers extracting and installing the certificate on both Windows and Linux.
-
-## Running the Application
-
-The Docker environment must be up and running for the application to connect to the emulated services. From the repository root, run the following commands.
+The Docker environment must be up and running to obtain the SSL certificate. From the repository root, run the following commands.
 
 ```cli
 cd docker
 docker compose up -d
 ```
+
+Next, follow the instructions on [Microsoft's Cosmos DB emulator documentation](https://learn.microsoft.com/en-us/azure/cosmos-db/how-to-develop-emulator?tabs=docker-linux%2Ccsharp&pivots=api-nosql#import-the-emulators-tlsssl-certificate). This project uses the Linux-based Cosmos DB emulator image. The linked documentation covers extracting and installing the certificate on both Windows and Linux systems.
+
+## Running the Application
 
 Once the emulated services are running, you can start the application from either Visual Studio or the command line.
 
