@@ -59,3 +59,7 @@ func start
 cd ./src/HalfLink.UI
 dotnet run -lp https
 ```
+
+Once both applications are running, navigate to `https://localhost:7269` in your browser.
+
+You should be ready to roll after that!
