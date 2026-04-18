@@ -6,7 +6,7 @@ In an attempt to sharpen my skills, I figured it would be a good idea to expand 
 
 ## The Idea
 
-After giving a prompt to ChatGPT for ideas, I settled on a URL shortening app, which I dubbed HalfLink. The application would allow a user to shorten a URL, provide redirecting from the HalfLink version of the original URL, and record basic click activity (in this case, the click's referrer.) The app would store links to a user's HalfLink stats page on-device using the browser's local storage API.
+I needed some ideas that for an app that was small, and somewhat made sense to use as starter to learn some cloud services. After consulting ChatGPT for ideas, I settled on a URL shortening app, which I dubbed HalfLink. The application would allow a user to shorten a URL, provide redirecting from the HalfLink version of the original URL, and record basic click activity (in this case, the click's referrer.) The app would store links to a user's HalfLink stats page on-device using the browser's local storage API.
 
 The tech stack was Cosmos DB, Azure Queues, Azure Functions, and Blazor Server. The local environment used Docker to run emulators for some Azure services, in particular Cosmos and Azurite (Azure Storage equivalent.) Cosmos, Queues, and Functions were all new to me, but I had a light amount of Blazor experience, so this was an opportunity to get more hands-on experience with it.
 
